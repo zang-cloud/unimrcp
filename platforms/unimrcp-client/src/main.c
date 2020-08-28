@@ -35,6 +35,8 @@ static apt_bool_t demo_framework_cmdline_process(demo_framework_t *framework, ch
 	char *name;
 	char *last;
 	name = apr_strtok(cmdline, " ", &last);
+	if(!name)
+		return running;
 
 	if(strcasecmp(name,"run") == 0) {
 		char *app_name = apr_strtok(NULL, " ", &last);
@@ -195,6 +197,7 @@ int main(int argc, const char * const *argv)
 	const char *log_conf_path;
 	demo_framework_t *framework;
 	apt_dir_layout_t *dir_layout = NULL;
+	const char *log_prefix = "unimrcpclient";
 
 	/* APR global initialization */
 	if(apr_initialize() != APR_SUCCESS) {
@@ -251,7 +254,14 @@ int main(int argc, const char * const *argv)
 	if(apt_log_output_mode_check(APT_LOG_OUTPUT_FILE) == TRUE) {
 		/* open the log file */
 		const char *log_dir_path = apt_dir_layout_path_get(dir_layout,APT_LAYOUT_LOG_DIR);
-		apt_log_file_open(log_dir_path,"unimrcpclient",MAX_LOG_FILE_SIZE,MAX_LOG_FILE_COUNT,FALSE,pool);
+		const char *logfile_conf_path = apt_confdir_filepath_get(dir_layout,"logfile.xml",pool);
+		apt_log_file_open_ex(log_dir_path,log_prefix,logfile_conf_path,pool);
+	}
+
+	if(apt_log_output_mode_check(APT_LOG_OUTPUT_SYSLOG) == TRUE) {
+		/* open the syslog */
+		const char *logfile_conf_path = apt_confdir_filepath_get(dir_layout,"syslog.xml",pool);
+		apt_syslog_open(log_prefix,logfile_conf_path,pool);
 	}
 
 	/* create demo framework */

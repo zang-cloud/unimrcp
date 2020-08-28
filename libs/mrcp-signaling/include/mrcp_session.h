@@ -80,7 +80,6 @@ struct mrcp_session_t {
 	const mrcp_session_event_vtable_t    *event_vtable;
 };
 
-
 /** MRCP session request vtable */
 struct mrcp_session_request_vtable_t {
 	/** Offer session descriptor */

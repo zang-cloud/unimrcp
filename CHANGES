@@ -1,3 +1,102 @@
+Changes for UniMRCP-1.7.0
+
+  APR-toolkit library
+
+  * If NTP has drifted the clock backwards, advance the queue based on the set timeout but not actual time difference. (Issue #257)
+
+  MPF library
+
+  * Feature: When tracing is set to a new mode of "3", send tracing logs directly to apt_log() using macro expansion. Thanks @sfgeorge. (Pull request #254)
+  * Reset all the left-over variables on mpf_buffer_restart().
+
+  MRCP client library
+
+  * Added a new function mrcp_application_session_attribs_set() to the client application interface. The new function allows to set optional
+    session attributes overriding or complimenting some of the profile settings such as SIP username or entire URI and feature tags.
+
+  MRCP server library
+
+  * Added a check for RTP settings on server profile registration.
+  * While creating a new MRCP channel, make sure associated engine is open and ready to process requests.
+  * Reworked profile-based association of MRCP resources and engines to allow specifying optional attributes per profile.
+  * Added support for optional session attributes passed from signaling agents down to engines.
+
+  MRCPv2 transport library
+  
+  * While trying to find an existing client connection, do not observe instances with closed socket. (Issue #259)
+  * Limit concurrent/shared use of an MRCPv2 client connection by the configuration parameter max-shared-use-count similarly to the server connection.
+  
+  Sofia-SIP module (MRCPv2 agent)
+
+  * Do not call nua_bye() and respond to session termination straightaway if nua_handle is used for resource discovery only.
+  * In offline mode, respond with SIP 503 Service Unavailable to SIP OPTIONS requests. Thanks @michaelplevy. (Issue #242)
+  * Allow disabling the Sofia SIP SDP Offer/Answer Engine Module. Thanks @schlagert. (Issue #248, Pull request #249)
+  * Added support for optional session attributes passed from signaling agents down to engines.
+  * Optionally extract SIP session call id and user name from SIP INVITE along with feature tags and pass them forward through session generic attributes.
+
+  ASR Client application (and library)
+
+  * Add asrclient support for multiple, builtin and remote grammars. Thanks @michaelplevy and @schlagert. (Issue #246)
+
+  Miscellaneous
+
+  * For Windows service, use RegisterServiceCtrlHandlerEx() instead of RegisterServiceCtrlHandler() in order to handle user-defined control cases for offline/online. Thanks @michaelplevy.
+  * Added new parameters to default configuration files.
+
+
+Changes for UniMRCP-1.6.0
+
+  APR-toolkit library
+
+  * Reworked log file rotation routine.
+  * Added support for syslog on Linux.
+
+  MPF library
+
+  * Use APT_LOG_MARK for log statement(s) of mpf_activity_detector to address linker errors using VS.
+
+  MRCP common library
+
+  * Fixed parsing of MRCP messages containing leading whitespace(s) in the message body.
+
+  MRCP server library
+
+  * Fixed a race condition issue in the synthesizer state machine caused by concurrent
+    SPEAK-COMPLETE event and BARGE-IN-OCCURRED request. (Issue #203)
+  * Added a new accessor function mrcp_server_engine_get().
+  * Association of MRCP resources and engines/plugins can now be specified dynamically per
+    MRCPv2 session.
+
+  RTSP library
+
+  * Respond to incoming RTSP OPTIONS requests with success. This method is used to check the
+    availability of the server.
+
+  Sofia-SIP module (MRCPv2 agent)
+
+  * Fixed MRCPv2 resource discovery routine of the client stack to populate multiple resources
+    specified per single SDP media.	Thanks Tobias. (Issue #213)
+  * Added support for feature tags set in the SIP header field Accept-Contact received in an initial
+    SIP INVITE message.
+
+  UMC sample application
+
+  * Added virtual destructors to base classes UmcSessionEventHandler and UmcSessionMethodProvider.
+  * Set Confidence-Threshold to 0.5 for sample recog session.
+  * Made DTMF recog scenario/session on par with speech recog.
+  * Made speech language configurable for synth scenario.
+
+  Miscellaneous
+
+  * Added mrcp_sofiasip_task.h and mrcp_sofiasip_task.c files to VS2005 project file as well.
+  * Fixed maintainer-mode warnings with GCC 7.3.1. Thanks Tobias. (Issue #213)
+  * First check the name of a command-line input not to be NULL before further parsing the command.
+    The change applies to all the applications. (Issue #223)
+  * Added a new default configuration file logfile.xml.
+  * Set AR_FLAGS to [cr] in configure.ac in order to suppress link-time warnings caused by newer
+    version of libtool 2.4.6.
+
+
 Changes for UniMRCP-1.5.0
 
   APR-toolkit library

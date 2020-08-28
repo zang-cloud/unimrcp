@@ -6,7 +6,7 @@ dnl
 
 AC_PREREQ(2.59)
 
-AC_INIT([unimrcp],[1.5.0])
+AC_INIT([unimrcp],[1.7.0])
 
 AC_CONFIG_AUX_DIR([build])
 AC_CONFIG_MACRO_DIR([build/acmacros])
@@ -55,6 +55,9 @@ dnl Skip detection of Fortran.
 m4_undefine([AC_PROG_F77])
 m4_defun([AC_PROG_F77],[])
 AC_PROG_LIBTOOL
+
+dnl Suppress warning: ar: 'u' modifier ignored since 'D' is the default
+AC_SUBST(AR_FLAGS, [cr])
 
 dnl Do not use autoconf generated compiler DEFS.
 rm confdefs.h
